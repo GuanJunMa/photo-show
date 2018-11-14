@@ -1,9 +1,7 @@
 require('normalize.css/normalize.css')
-require('styles/App.css')
+require('styles/App.scss')
 
 import React from 'react'
-
-let yeomanImage = require('../images/yeoman.png')
 
 let imageDatas = require('../data/imageDate.json')
 
@@ -11,20 +9,43 @@ let imageDatas = require('../data/imageDate.json')
 imageDatas = (function genImageURL(imageDataArray) {
   for (let i = 0; i < imageDataArray.length; i++) {
     let singleImageData = imageDataArray[i]
-
-    singleImageData.imageURL = require(`../images/${singleImageData.fileName}`)
-
+    singleImageData.imageURL = `../images/${singleImageData.filename}`
     imageDataArray[i] = singleImageData
   }
   return imageDataArray
 })(imageDatas)
 
+// 图片组件
+var ImgFigure = React.createClass({
+  render: function() {
+    return (
+      <figure className="img-figure">
+        <img className="figure-img" src={this.props.data.imageURL} />
+        <figurecaption>
+          <h2 className="img-title">{this.props.data.title}</h2>
+        </figurecaption>
+      </figure>
+    )
+  }
+})
+
+
 class AppComponent extends React.Component {
   render() {
+
+    var controllerUnits = []
+    var imgFigures = []
+    imageDatas.forEach(function(value) {
+      imgFigures.push(<ImgFigure data={value} />)
+    })
     return (
       <section className="stage">
-        <section className="img-sec"></section>
-        <nav className="controller-nav"></nav>
+        <section className="img-sec">
+          {imgFigures}
+        </section>
+        <nav className="controller-nav">
+          {controllerUnits}
+        </nav>
       </section>
     )
   }
